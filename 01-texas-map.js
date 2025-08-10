@@ -1,11 +1,9 @@
-// 01-texas-map.js — small legend (numbers only), faint borders, subtle contrast
+
 (() => {
   const width = 900, height = 700;
 
-  // Subtle boost near white; tweak if you want (0.95 = very subtle, 0.85 = stronger)
   const GAMMA = 0.90;
 
-  // Small legend config
   const LEGEND_WIDTH = 220;
   const LEGEND_HEIGHT = 10;
   const LEGEND_TOP = 14;
@@ -36,29 +34,26 @@
   Promise.all([d3.json(GEO_PATH), d3.csv(CSV_PATH)]).then(([geoData, table]) => {
     const features = geoData.features || geoData;
 
-    // County -> value
     const valueByCounty = new Map(table.map(r => [norm(r["County"]), toNum(r["Difference 15-24"])]));
     const vals = Array.from(valueByCounty.values()).filter(Number.isFinite);
     const extent = d3.extent(vals);
     const maxAbs = Math.max(Math.abs(extent[0] ?? -1), Math.abs(extent[1] ?? 1)) || 1;
 
-    // "Nice" symmetric span for clean ticks
     const legendTicks = d3.ticks(-maxAbs, maxAbs, 5);
     const legendMax = Math.max(
       Math.abs(legendTicks[0]),
       Math.abs(legendTicks[legendTicks.length - 1])
     ) || maxAbs;
 
-    // Color with small gamma boost near white
-    const interp = d3.interpolatePuOr; // purple (more) -> white -> orange (fewer)
+    const interp = d3.interpolatePuOr; 
     const colorValue = v => {
       if (!Number.isFinite(v)) return "#f0f0f0";
-      let s = Math.max(-1, Math.min(1, v / legendMax));   // normalize to [-1,1]
-      s = Math.sign(s) * Math.pow(Math.abs(s), GAMMA);    // subtle boost
+      let s = Math.max(-1, Math.min(1, v / legendMax)); 
+      s = Math.sign(s) * Math.pow(Math.abs(s), GAMMA);  
       return interp((s + 1) / 2);
     };
 
-    // Map
+
     svg.append("g")
       .attr("class", "counties")
       .selectAll("path")
@@ -67,7 +62,7 @@
       .attr("d", path)
       .attr("fill", d => colorValue(valueByCounty.get(norm(d.properties?.CNTY_NM))))
       .attr("stroke", "#000")
-      .attr("stroke-opacity", 0.12)   // faint border
+      .attr("stroke-opacity", 0.12)  
       .attr("stroke-width", 0.35)
       .attr("vector-effect", "non-scaling-stroke")
       .attr("shape-rendering", "crispEdges")
@@ -90,7 +85,7 @@
       })
       .on("mouseout", () => tooltip.style("opacity", 0));
 
-    // Small legend (numbers only)
+
     drawSmallLegend(svg, colorValue, legendMax);
   }).catch(err => console.error("Error loading data:", err));
 
@@ -99,7 +94,7 @@
       .domain([-legendMax, legendMax])
       .range([0, LEGEND_WIDTH]);
 
-    // Gradient that matches the map colors
+
     const defs = svg.append("defs");
     const grad = defs.append("linearGradient")
       .attr("id", "legend-gradient")
@@ -119,7 +114,7 @@
       .attr("class", "legend")
       .attr("transform", `translate(${width - LEGEND_WIDTH - LEGEND_RIGHT}, ${LEGEND_TOP})`);
 
-    // Color ramp
+
     g.append("rect")
       .attr("width", LEGEND_WIDTH)
       .attr("height", LEGEND_HEIGHT)
@@ -127,7 +122,7 @@
       .attr("stroke", "#ccc")
       .attr("shape-rendering", "crispEdges");
 
-    // Numbers only (3 ticks so it doesn’t crowd)
+
     const axis = d3.axisBottom(x)
       .tickValues([-legendMax, 0, legendMax])
       .tickFormat(d3.format(",d"))
