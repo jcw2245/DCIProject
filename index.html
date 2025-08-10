@@ -5,13 +5,13 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Look at CPS Cases in Texas</title>
 
-  <!-- Fonts -->
+
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Lora:wght@400;700&display=swap" rel="stylesheet">
   <link rel="icon" href="data:,">
 
-  <!-- D3 -->
+
   <script src="https://d3js.org/d3.v7.min.js"></script>
 
   <style>
@@ -46,16 +46,15 @@
       padding: 4em 0;
     }
 
-    /* Make charts fit the text column */
+
     svg {
       background: #f8f8f8;
       display: block;
-      width: 100%;     /* fill the .content column */
-      height: auto;    /* keep aspect ratio using viewBox */
+      width: 100%;  
+      height: auto; 
       margin: 0 auto 1.2em;
     }
 
-    /* Tooltips (absolute to page; JS uses pageX/pageY) */
     .tooltip {
       position: absolute;
       background: white;
@@ -71,10 +70,10 @@
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
-  position: relative;          /* enable overlay */
+  position: relative;      
 }
 
-/* Dark overlay over the image */
+
 .with-image-bg::before{
   content: "";
   position: absolute;
@@ -87,7 +86,6 @@
   pointer-events: none;
 }
 
-/* Make the header tall enough and keep text above the overlay */
 .header{
   min-height: 55vh;
   display: flex;
@@ -96,13 +94,13 @@
 .with-image-bg .content{
   position: relative;
   z-index: 1;
-  color: #fff;                 /* readable text */
+  color: #fff;               
 }
 .with-image-bg h1,
 .with-image-bg .subhead{
   text-shadow: 0 2px 6px rgba(0,0,0,.45);
 }
-.with-image-bg a{ color:#ffd0cb; } /* optional: link color on dark bg */
+.with-image-bg a{ color:#ffd0cb; } 
 
 
     code { font-family: 'Courier New', monospace; background: #fff880; }
@@ -131,7 +129,7 @@
     <p>Another bill that was passed in the last few years was House Bill 567. This bill was passed in 2021 and stopped DFPS workers from removing children in nonemergency situations and established a new definition for neglect in the state of Texas.</p>
 
     <h3>Change in Confirmed CPS Victims (2015–2024)</h3>
-    <!-- viewBox sets the drawing space; CSS makes it fit the column -->
+
     <svg id="map" viewBox="0 0 900 700" role="img" aria-label="Change in confirmed CPS victims by county in Texas, 2015–2024"></svg>
     <div class="tooltip" id="tooltip"></div>
 
@@ -147,7 +145,7 @@
       <div class="byline">
           <p><a href="https://github.com/jcw2245/Endangered_Animals-">GitHub Repo For the Piece's Details</a></p>
       </div>
-    <!-- Scripts -->
+
     <script src="01-texas-map.js"></script>
     <script src="barchart.js"></script>
   </div>
