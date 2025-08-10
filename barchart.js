@@ -1,8 +1,14 @@
-
+// barchart.js
 (() => {
   console.log("barchart.js loaded");
 
-  const CSV_PATH = encodeURI("Data/FinalProject_CPS Cases - Year and Removal Description.csv");
+  // Build a URL relative to the current page (works at USERNAME.github.io/REPO/)
+  // Add ?v=4 to bust any cached 404 on Pages
+  const DATA_URL = new URL(
+    "Data/FinalProject_CPS Cases - Year and Removal Description.csv?v=4",
+    document.baseURI
+  ).href;
+  console.log("Loading CSV from:", DATA_URL);
 
   const width = 900, height = 700;
   const margin = { top: 20, right: 30, bottom: 50, left: 70 };
@@ -44,7 +50,7 @@
     return Number.isFinite(n) ? n : NaN;
   };
 
-  d3.csv(CSV_PATH).then(rows => {
+  d3.csv(DATA_URL).then(rows => {
     if (!rows?.length) return;
 
     const columns = Object.keys(rows[0]);
@@ -161,5 +167,11 @@
       .attr("x", 16).attr("y", 10)
       .style("font", "12px system-ui, sans-serif")
       .text(d => d);
-  }).catch(err => console.error(err));
+  }).catch(err => {
+    console.error("CSV load failed:", err);
+    d3.select("#chart").append("text")
+      .attr("x", 12).attr("y", 24)
+      .attr("fill", "crimson")
+      .text("Could not load CSV. Open DevTools → Network to check the path/casing.");
+  });
 })();
