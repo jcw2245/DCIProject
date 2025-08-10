@@ -1,8 +1,9 @@
-
+// barchart.js
 (() => {
   console.log("barchart.js loaded");
 
-  const CSV_PATH = encodeURI("data/FinalProject_CPS Cases - Year and Removal Description.csv");
+  // NOTE: capital D for GitHub Pages (case-sensitive)
+  const CSV_PATH = encodeURI("Data/FinalProject_CPS Cases - Year and Removal Description.csv");
 
   const width = 900, height = 700;
   const margin = { top: 20, right: 30, bottom: 50, left: 70 };
@@ -26,11 +27,10 @@
     .style("pointer-events", "none")
     .style("opacity", 0);
 
-
   const x0 = d3.scaleBand().range([0, innerW]).paddingInner(0.2);
-  const x1 = d3.scaleBand().padding(0.15);                          
+  const x1 = d3.scaleBand().padding(0.15);
   const y  = d3.scaleLinear().range([innerH, 0]);
-  const color = d3.scaleOrdinal(); 
+  const color = d3.scaleOrdinal();
 
   const findCol = (cols, re) => cols.find(c => re.test(c.replace(/\s+/g, " ").trim().toLowerCase()));
   const parseYear = v => {
@@ -49,6 +49,7 @@
     if (!rows?.length) return;
 
     const columns = Object.keys(rows[0]);
+
     const yearCol =
       findCol(columns, /^year$/i) ||
       findCol(columns, /\bfiscal.*year\b|\bacademic.*year\b|\bcalendar.*year\b|year/i) ||
@@ -57,13 +58,14 @@
     const typeCol =
       findCol(columns, /removal.*description|removal.*(type|category)|description|reason/i);
 
+    // Slightly more robust: match "Confirmed CPS Victims" / "Victims" / "Cases" too
     const countCol =
       findCol(columns, /^count$/i) ||
-      findCol(columns, /\b(value|total|num(ber)?)\b/i);
+      findCol(columns, /\b(confirmed\s*cps\s*victims?|victims?|cases?|value|total|num(ber)?)\b/i);
 
     let years = [];
     let keys  = [];
-    let flat  = []; 
+    let flat  = [];
 
     if (typeCol && countCol) {
       const data = rows.map(r => ({
@@ -94,13 +96,13 @@
     x1.domain(keys).range([0, x0.bandwidth()]);
     y.domain([0, d3.max(flat, d => d.value) || 1]).nice();
 
-const paletteByKey = {
-  "investigation":       "#B39DDB", 
-  "family preservation": "#4E79A7"  
-};
-color
-  .domain(keys)
-  .range(keys.map(k => paletteByKey[k.toLowerCase().trim()] || "#999999"));
+    const paletteByKey = {
+      "investigation":       "#B39DDB",
+      "family preservation": "#4E79A7"
+    };
+    color
+      .domain(keys)
+      .range(keys.map(k => paletteByKey[k.toLowerCase().trim()] || "#999999"));
 
     svg.append("g")
       .attr("transform", `translate(0,${innerH})`)
