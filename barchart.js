@@ -1,4 +1,3 @@
-// barchart.js — grouped bars by year (works with wide or long CSV)
 
 (() => {
   console.log("barchart.js loaded");
@@ -27,13 +26,12 @@
     .style("pointer-events", "none")
     .style("opacity", 0);
 
-  // Scales
-  const x0 = d3.scaleBand().range([0, innerW]).paddingInner(0.2);  // years
-  const x1 = d3.scaleBand().padding(0.15);                          // series within year
-  const y  = d3.scaleLinear().range([innerH, 0]);
-  const color = d3.scaleOrdinal(); // we'll set the range after we know the keys
 
-  // Helpers
+  const x0 = d3.scaleBand().range([0, innerW]).paddingInner(0.2);
+  const x1 = d3.scaleBand().padding(0.15);                          
+  const y  = d3.scaleLinear().range([innerH, 0]);
+  const color = d3.scaleOrdinal(); 
+
   const findCol = (cols, re) => cols.find(c => re.test(c.replace(/\s+/g, " ").trim().toLowerCase()));
   const parseYear = v => {
     if (v == null || v === "") return NaN;
@@ -65,10 +63,9 @@
 
     let years = [];
     let keys  = [];
-    let flat  = []; // [{year, key, value}, …]
+    let flat  = []; 
 
     if (typeCol && countCol) {
-      // long/tidy -> roll to year x key
       const data = rows.map(r => ({
         year: parseYear(r[yearCol]),
         key: String(r[typeCol] ?? "").trim(),
@@ -82,7 +79,6 @@
         years.map(yv => ({ year: yv, key: k, value: byKeyYear.get(k)?.get(yv) || 0 }))
       );
     } else {
-      // wide -> each non-year numeric column is a key
       years = rows.map(r => parseYear(r[yearCol])).filter(Number.isFinite).sort((a,b)=>a-b);
       keys = columns.filter(c =>
         c !== yearCol && rows.some(r => Number.isFinite(parseNum(r[c])))
@@ -94,22 +90,18 @@
       });
     }
 
-    // Domains
     x0.domain(years);
     x1.domain(keys).range([0, x0.bandwidth()]);
     y.domain([0, d3.max(flat, d => d.value) || 1]).nice();
 
-    // 🔹 Lock colors by series name (case-insensitive)
-    // 🔹 Lock colors by series name (case-insensitive)
 const paletteByKey = {
-  "investigation":       "#B39DDB", // softer, lighter purple (Material Purple 300)
-  "family preservation": "#4E79A7"  // blue
+  "investigation":       "#B39DDB", 
+  "family preservation": "#4E79A7"  
 };
 color
   .domain(keys)
   .range(keys.map(k => paletteByKey[k.toLowerCase().trim()] || "#999999"));
 
-    // Axes
     svg.append("g")
       .attr("transform", `translate(0,${innerH})`)
       .call(d3.axisBottom(x0).tickFormat(d3.format("d")))
@@ -129,7 +121,6 @@ color
         .attr("text-anchor", "start")
         .text("Number of cases"));
 
-    // Bars
     const yearG = svg.selectAll(".year")
       .data(years)
       .join("g")
@@ -157,7 +148,6 @@ color
       })
       .on("mouseout", () => tooltip.style("opacity", 0));
 
-    // Legend (top-right)
     const legend = svg.append("g")
       .attr("transform", `translate(${innerW - 160}, 0)`);
     const leg = legend.selectAll("g")
