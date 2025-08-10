@@ -1,8 +1,7 @@
-// barchart.js
+
 (() => {
   console.log("barchart.js loaded");
 
-  // NOTE: capital D for GitHub Pages (case-sensitive)
   const CSV_PATH = encodeURI("Data/FinalProject_CPS Cases - Year and Removal Description.csv");
 
   const width = 900, height = 700;
@@ -58,7 +57,6 @@
     const typeCol =
       findCol(columns, /removal.*description|removal.*(type|category)|description|reason/i);
 
-    // Slightly more robust: match "Confirmed CPS Victims" / "Victims" / "Cases" too
     const countCol =
       findCol(columns, /^count$/i) ||
       findCol(columns, /\b(confirmed\s*cps\s*victims?|victims?|cases?|value|total|num(ber)?)\b/i);
