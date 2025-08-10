@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Look at CPS Cases in Texas</title>
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Lora:wght@400;700&display=swap" rel="stylesheet">
+  <link rel="icon" href="data:,">
+
+  <!-- D3 -->
+  <script src="https://d3js.org/d3.v7.min.js"></script>
+
+  <style>
+    body {
+      margin: 0;
+      font-size: 20px;
+      font-family: Georgia, 'Times New Roman', Times, serif;
+      text-rendering: optimizeLegibility;
+    }
+
+    .content { max-width: 640px; margin: auto; }
+    .header { padding: 3em 0; }
+    a { color: #f05349; }
+
+    h1 { font-family: 'Lora', Georgia, serif; font-weight: bold; font-size: 3em; line-height: 1.1; }
+    .subhead { font-family: 'Lora', Georgia, serif; }
+
+    h2, h3 { text-align: center; }
+
+    p { line-height: 1.6; margin: 0; padding-bottom: 1.2em; }
+    ul { margin: 0; padding-bottom: 1em; line-height: 1.6; }
+    figure { margin: 0; padding-bottom: 1.2em; }
+    figcaption { font-size: 0.8em; text-align: center; margin-top: 0.5em; color: #666; }
+    iframe, img, video { max-width: 100%; }
+    iframe { padding-bottom: 1.2em; }
+
+    .footer {
+      background: #f4f4f4;
+      text-align: center;
+      font-size: 0.8em;
+      margin-top: 4em;
+      padding: 4em 0;
+    }
+
+    /* Make charts fit the text column */
+    svg {
+      background: #f8f8f8;
+      display: block;
+      width: 100%;     /* fill the .content column */
+      height: auto;    /* keep aspect ratio using viewBox */
+      margin: 0 auto 1.2em;
+    }
+
+    /* Tooltips (absolute to page; JS uses pageX/pageY) */
+    .tooltip {
+      position: absolute;
+      background: white;
+      border: 1px solid #999;
+      padding: 5px;
+      font-size: 12px;
+      pointer-events: none;
+      opacity: 0;
+    }
+
+ .with-image-bg{
+  background-image: url('statecap.jpg');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  position: relative;          /* enable overlay */
+}
+
+/* Dark overlay over the image */
+.with-image-bg::before{
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to bottom,
+    rgba(0,0,0,.25),
+    rgba(0,0,0,.55)
+  );
+  pointer-events: none;
+}
+
+/* Make the header tall enough and keep text above the overlay */
+.header{
+  min-height: 55vh;
+  display: flex;
+  align-items: flex-end;
+}
+.with-image-bg .content{
+  position: relative;
+  z-index: 1;
+  color: #fff;                 /* readable text */
+}
+.with-image-bg h1,
+.with-image-bg .subhead{
+  text-shadow: 0 2px 6px rgba(0,0,0,.45);
+}
+.with-image-bg a{ color:#ffd0cb; } /* optional: link color on dark bg */
+
+
+    code { font-family: 'Courier New', monospace; background: #fff880; }
+  </style>
+</head>
+
+<body>
+  <div class="header with-image-bg">
+    <div class="content">
+      <h1>CPS Cases Continously Go Down For the Past Ten Years in Texas as State Pushes Family First</h1>
+      <p class="subhead">CPS cases have been decreasing for the last ten years, as Texas makes new laws to limit how cases are interacted with between the victims, parents and CPS caseworkers.</p>
+       <p>Image By Lewis Ashton</p>
+    </div>
+  </div>
+
+  <div class="content">
+    <div class="byline">
+
+      <p>By <a href="https://jcw2245.github.io/Portfolio/">Jaylynn Ward</a></p>
+    </div>
+    <p>Texas has passed several laws that restrict what DFPS (Texas Department of Family and Protective Services) workers can do in certain situations, pushing a family model to limit how many children are allowed in foster care.</p>
+    <p>House Bill 730, passed in 2023, changed the way that caseworkers could conduct cases. This bill now requires caseworkers to immediately state the rights of the parents before investigating abuse and neglect cases. It requires these caseworkers to provide the parents with a written summary of the allegations along with a description of the process that they will be involved in. It symbolizes several nationwide bills that allow Miranda-style warnings to parents. </p>
+    <p>Along with these new provisions for parents, calling in reports has also changed. A person calling in a report can no longer be anonymous to Child Protective Investigations (CPI), which became a separate division of CPS (Child Protective Services) in 2017. Both are held under the Texas Department of Family and Protective Services. </p>
+    <p>If a parent or guardian is suspected of denying entry to the caseworker, they can go to a judge and ask for a court order.  After this bill was passed, the DFPS worker now has to show probable cause with more evidence than the past standards. Parents involved in these cases, with receiving a court order and appearing before a judge, also receive a state-appointed attorney if they cannot afford one. </p>
+    <p>In 2023, House Bill 1087 also passed requiring investigators to clearly document their efforts they made throughout the investigation to try and keep the child with their family. </p>
+    <p>Another bill that was passed in the last few years was House Bill 567. This bill was passed in 2021 and stopped DFPS workers from removing children in nonemergency situations and established a new definition for neglect in the state of Texas.</p>
+
+    <h3>Change in Confirmed CPS Victims (2015–2024)</h3>
+    <!-- viewBox sets the drawing space; CSS makes it fit the column -->
+    <svg id="map" viewBox="0 0 900 700" role="img" aria-label="Change in confirmed CPS victims by county in Texas, 2015–2024"></svg>
+    <div class="tooltip" id="tooltip"></div>
+
+    <h3>Confirmed CPS Victims by Removal Description Over Time</h3>
+    <svg id="chart" viewBox="0 0 900 700" role="img" aria-label="Confirmed CPS victims by removal description over time"></svg>
+    <div class="tooltip" id="line-tooltip"></div>
+
+    <p>According to the Texas Tribune, the judge for the states’ federal lawsuit ruled that children who enter foster care and age out end up in worse conditions and ‘more damage’ than when they enter. For this reason, the rules for the state’s foster care system also push to keep the children with their families.</p>
+    <p>If a child has to be removed from their homes and go into the foster care system, DFPS workers have to give children a duffel bag or a backpack in new legislation passed in September 2023. This was in response to some of these children only being given trash bags to gather their belongings. </p>
+    <p>This bill (House Bill 3765) was created by Democratic Representative from San Antonio, Josey Garcia, who was a foster care child herself. She received a trash bag. The belongings that she left with was a copy of the Bible and two outfits. </p>
+    <p>According to the DFPS website, 11,183 children are currently in paid foster care (foster homes). For 2024, there were 9,220 removals. There are only 169 foster care homes available for 2024 spread over the state that are approved by this organization. With lack of resources in the foster care system and within enough foster homes, the state has changed how CPS investigations will be handled, which has led to the decrease in cases for the state.</p>
+    <div class="content">
+      <div class="byline">
+          <p><a href="https://github.com/jcw2245/Endangered_Animals-">GitHub Repo For the Piece's Details</a></p>
+      </div>
+    <!-- Scripts -->
+    <script src="01-texas-map.js"></script>
+    <script src="barchart.js"></script>
+  </div>
+</body>
+</html>

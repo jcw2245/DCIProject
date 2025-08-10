@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Texas CPS Victim Map</title>
+  <style>
+    body {
+      font-family: 'Lora', serif;
+      background-color: #f9f9f9;
+      margin: 0;
+      padding: 2em;
+    }
+
+    .chart-wrapper {
+      max-width: 960px;
+      margin: 0 auto;
+      text-align: center;
+    }
+
+    .chart-title {
+      font-size: 36px;
+      font-weight: bold;
+      margin-bottom: 0.25em;
+    }
+
+    .chart-subtitle {
+      font-size: 20px;
+      color: #555;
+      margin-bottom: 1em;
+    }
+
+    svg {
+      display: block;
+      margin: 0 auto;
+    }
+
+    #tooltip {
+      position: absolute;
+      background-color: white;
+      padding: 8px;
+      border: 1px solid #ccc;
+      pointer-events: none;
+      opacity: 0;
+    }
+    /* replace your existing .county rule */
+.county-halo path {
+  fill: none;
+  stroke: #fff;                 /* white underlay */
+  stroke-width: 2.2;
+  vector-effect: non-scaling-stroke;
+  opacity: 0.95;
+}
+.county {                       /* top stroke */
+  stroke: rgba(0,0,0,0.35);
+  stroke-width: 0.8;
+  vector-effect: non-scaling-stroke;
+  paint-order: stroke fill;
+}
+
+  </style>
+</head>
+<body>
+  <div class="chart-wrapper">
+    <h1 class="chart-title">Change in Confirmed CPS Victims (2015–2024)</h1>
+    <p class="chart-subtitle">Each Texas county’s net change in confirmed CPS victims over the last decade</p>
+    <svg id="map" width="900" height="700"></svg>
+  </div>
+
+  <div id="tooltip"></div>
+  <script src="01-texas-map.js"></script>
+</body>
+</html>
