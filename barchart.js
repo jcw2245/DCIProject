@@ -1,9 +1,7 @@
-// barchart.js
+
 (() => {
   console.log("barchart.js loaded");
 
-  // Build a URL relative to the current page (works at USERNAME.github.io/REPO/)
-  // Add ?v=4 to bust any cached 404 on Pages
   const DATA_URL = new URL(
     "Data/FinalProject_CPS Cases - Year and Removal Description.csv?v=4",
     document.baseURI
@@ -172,6 +170,5 @@
     d3.select("#chart").append("text")
       .attr("x", 12).attr("y", 24)
       .attr("fill", "crimson")
-      .text("Could not load CSV. Open DevTools → Network to check the path/casing.");
   });
 })();
